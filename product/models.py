@@ -28,13 +28,7 @@ class ProductCategory(models.Model):
         db_table = 'product_category'
 
 
-class ProductConfigiraton(models.Model):
-    variation_option = models.ForeignKey('VariationOption', models.DO_NOTHING)
-    product_item = models.ForeignKey('ProductItem', models.DO_NOTHING)
 
-    class Meta:
-        managed = False
-        db_table = 'product_configiraton'
 
 
 class ProductItem(models.Model):
@@ -73,3 +67,13 @@ class VariationOption(models.Model):
     class Meta:
         managed = False
         db_table = 'variation_option'
+
+
+class ProductConfigiraton(models.Model):
+    # id = models.AutoField(primary_key=true)
+    variation_option = models.ForeignKey(VariationOption, models.DO_NOTHING)
+    product_item = models.ForeignKey(ProductItem, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'product_configiraton'
