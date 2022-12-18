@@ -3,11 +3,11 @@ from mptt.models import MPTTModel
 from django.urls import reverse
 from mptt.fields import TreeForeignKey
 from django.utils.text import slugify
-
+from django.db.models import Min
 
 class Product(models.Model):
     name = models.CharField(max_length=45, blank=True, null=True)
-    description = models.CharField(max_length=45, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     slug = models.SlugField(null=True, blank=True)
     image = models.ImageField(blank=True, upload_to="products/images")
     product_category = models.ForeignKey('Category', models.DO_NOTHING)
@@ -15,8 +15,11 @@ class Product(models.Model):
     def __str__(self) -> str:
         return self.name
 
-    def get_product_ıtem(self):
-        return Item.objects.get(pk=self.id)
+    def get_product_items(self):
+        return Item.objects.filter(product  = self.id)
+
+    def get_min_price(self):
+        return  Item.objects.filter(product  = self.id).aggregate(Min('price'))
 
     def get_absolute_url(self):
         return reverse('product', kwargs={'slug': self.slug})
@@ -24,7 +27,6 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Product, self).save(*args, **kwargs)
-
 
 
 # product category tabe
@@ -37,6 +39,8 @@ class Category(MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['category_name']
 
+
+    
     def get_products(self):
         return Product.objects.filter(product_category=self.category_name)
 
@@ -68,6 +72,13 @@ class Item(models.Model):
     def __str__(self) -> str:
         return self.product.name
 
+    
+    def product_detail(self):
+        return Product.objects.get(pk=self.id)
+
+    def product_configirations(self):
+        return Configiraton.objects.filter(product_item = self.id)
+
 
 # variation table
 class Variation(models.Model):
@@ -77,15 +88,19 @@ class Variation(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    def get_variation_options(self):
+        return VariationOption.objects.filter(variation_id = self.id)
+
 
 #  variationOption table
 class VariationOption(models.Model):
-    variation = models.ForeignKey(Variation, models.DO_NOTHING)
+    variation_id = models.ForeignKey(Variation, models.DO_NOTHING)
     value = models.CharField(max_length=45, blank=True, null=True)
 
     def __str__(self) -> str:
         return self.value
-
+    
+   
 
 # ProductConfigiration table
 class Configiraton(models.Model):
@@ -93,6 +108,14 @@ class Configiraton(models.Model):
     variation_option = models.ForeignKey('VariationOption', models.DO_NOTHING)
     product_item = models.ForeignKey('Item', models.DO_NOTHING)
 
+    #foregin keyler sayersinde direkt olarak diğer tabloya ulaşabiliyoruz!!11
+    def __str__(self):
+        return  str(self.int ) +  self.variation_option.value
+
+    def get_variation_option(self):
+        return VariationOption.objects.filter(id = self.variation_option)
+
+  
 
 # class ProductCategory(MPTTModel):
 #     category_name = models.CharField(max_length=45, blank=True, null=True)

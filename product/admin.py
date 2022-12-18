@@ -4,11 +4,11 @@ from .models import *
 from mptt.admin import DraggableMPTTAdmin
 from mptt.admin import MPTTModelAdmin
 
+
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['title','category', 'status','image_tag']
+    list_display = ['title', 'category', 'status', 'image_tag']
     list_filter = ['category']
     readonly_fields = ('image_tag',)
-    # inlines = [ProductImageInline,ProductVariantsInline,ProductLangInline]
 
 
 class CategoryAdmin(DraggableMPTTAdmin):
@@ -18,6 +18,10 @@ class CategoryAdmin(DraggableMPTTAdmin):
     list_display_links = ('indented_title',)
     prepopulated_fields = {'slug': ('title',)}
 
+
+    
+    class MPTTMeta:
+        order_insertion_by = ['title']
     def get_queryset(self, request):
         qs = super().get_queryset(request)
 
@@ -47,7 +51,8 @@ class CategoryAdmin(DraggableMPTTAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["name", "description", "product_category"]
+    list_display = ["name", "description", "product_category", "slug"]
+    prepopulated_fields = {'slug': ('name',)}
 
 
 class ProductCategoryAdmin(MPTTModelAdmin):
@@ -70,7 +75,7 @@ class VariationAdmin(admin.ModelAdmin):
 
 
 class variationOptionAdmin(admin.ModelAdmin):
-    list_display = ["variation", "value"]
+    list_display = ["variation_id", "value"]
 
 
 admin.site.register(Product, CategoryAdmin)

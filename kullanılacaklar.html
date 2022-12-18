@@ -1,0 +1,23 @@
+           <!-- <img src="bar.png" alt="Bar"
+     height="10" width="{% widthratio this_value max_value max_width %}"> -->
+
+
+
+
+     
+
+
+
+                    <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                        <div class="block-4 text-center border">
+                            <figure class="block-4-image">
+                                <a href="{% url  'product_detail' product.slug  %}"><img src="{{ product.image.url  }}"
+                                        alt="Image placeholder" class="img-fluid"></a>
+                            </figure>
+                            <div class="block-4-text p-4">
+                                <h3><a href="{% url  'product_detail' product.slug  %}">{{product.slug}}</a></h3>
+                                <p class="mb-0">{{product.description}}</p>
+                                <p class="text-primary font-weight-bold"> {{product.get_min_price.price__min}} TL</p>
+                            </div>
+                        </div>
+                    </div>
