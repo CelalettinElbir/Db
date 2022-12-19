@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import *
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 # Create your views here.
 
 # def productCategory(request,categoryId):
@@ -35,33 +36,45 @@ def category_products(request, id):
     size_option = request.GET.get('size-option')
     color_option = request.GET.get('color-option')
     search = request.GET.get('search')
-    print(search,"---------------------")
+    page_number = request.GET.get('page')
     # categoriye göre filtereleme
     query_products = Item.objects.filter(product__product_category=id)
-    if search != ''  and search is not None:
-        query_products.filter(product__name__icontains = search,sku__icontains = search)
+
+    # Price'a göre filtreleleme
     if min_price != '' and min_price is not None and max_price != '' and max_price is not None:
-        query_products = Item.objects.filter(
+        query_products = query_products.filter(
             price__range=(min_price, max_price))
     elif min_price != '' and min_price is not None:
-        query_products = Item.objects.filter(
+        query_products = query_products.filter(
             price__gte=min_price)
     elif max_price != '' and max_price is not None:
-        query_products = Item.objects.filter(
+        query_products = query_products.filter(
             price__lte=max_price)
+    # seacrh' e göre filtreleme
+    if search != '' and search is not None:
+        query = query_products.filter(
+            product__name__icontains=search)
+        if query.count() == 0:
+            query_products = query_products.filter(
+                sku__exact=search)
+        else:
+            query_products = query
 
     # size a göre filreleme
 
+    if size_option != "" and size_option is not None:
+        query_products = query_products.filter(variations__value=size_option)
+    # color'a a göre filreleme
+    if color_option != "" and color_option is not None:
+        query_products = query_products.filter(variations__value=color_option)
 
-    if size_option != '' and max_price is not None:
-        Configiraton.objects.filter()
 
+    paginator = Paginator(query_products, 1)
 
-    # query_product.filter(price__range=(min_price, max_price))
-
+    product_per_page = paginator.get_page(page_number)
     context = {
         # "products": Product.objects.filter(product_category_id=id),
-        "products": query_products,
+        "products": product_per_page,
         "categories": Category.objects.all(),
         'variations': Variation.objects.filter(product_category=id),
     }
@@ -69,21 +82,20 @@ def category_products(request, id):
     return render(request, 'home/products.html', context)
 
 
-def product_detail(request, slug):
+def product_detail(request, slug,id):
     context = dict()
-    selectedProduct = Product.objects.get(slug=slug)
+    selectedProduct = Item.objects.get(id =id)
     context = {
 
         "product": selectedProduct,
         "categories": Category.objects.all(),
-        'variations': Variation.objects.filter(product_category=selectedProduct.product_category.id),
+        # 'variations': Variation.objects.filter(product_category=selectedProduct.product_category.id),
 
     }
 
     return render(request, 'home/product_detail.html', context)
 
-
-# yapılacaklar
-# her bir ürünün kenine ait detay sayfası olacak
-# ürünler habgi varyasyonlara göre filtelenebilceği getirilecek
-# ürünleri vayastonlara göre filtreleyebimeliyiz.
+#yapılacaklar 
+#ilk olarak itema slug ekledim 
+#o sluga özel olarak detail sayfasına gitmesini sağla 
+#sonra detail sayfasını düzenle

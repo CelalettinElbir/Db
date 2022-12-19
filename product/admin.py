@@ -51,8 +51,8 @@ class CategoryAdmin(DraggableMPTTAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["name", "description", "product_category", "slug"]
-    prepopulated_fields = {'slug': ('name',)}
+    list_display = ["name", "description", "product_category", ]
+    # prepopulated_fields = {'slug': ('name',)}
 
 
 class ProductCategoryAdmin(MPTTModelAdmin):
@@ -67,9 +67,9 @@ class ProductConfigiratonAdmin(admin.ModelAdmin):
 
 
 class ProductItemAdmin(admin.ModelAdmin):
-    list_display = ["product", "sku", "in_stock", "price", "product_image"]
+    list_display = ["product", "sku", "in_stock", "price", "product_image","slug"]
 
-
+    # prepopulated_fields = {"slug": ("product__name",)}
 class VariationAdmin(admin.ModelAdmin):
     list_display = ["name", "product_category"]
 
@@ -82,7 +82,7 @@ admin.site.register(Product, CategoryAdmin)
 
 # admin.site.register(ProductCategory, ProductCategoryAdmin)
 
-admin.site.register(Configiraton)
+# admin.site.register(Configiraton)
 
 admin.site.register(Item, ProductItemAdmin)
 

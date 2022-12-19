@@ -3,41 +3,46 @@
 {% load static %}
 
 {% block content %}
-
-
 <div class="site-section">
   <div class="container">
     <div class="row">
       <div class="col-md-6">
-        <img src="{{ product.image.url  }}" alt="Image" class="img-fluid">
+        <img src="{{ product.product.image.url  }}" alt="Image" class="img-fluid">
       </div>
       <div class="col-md-6">
-        <h2 class="text-black">{{ product.name }}</h2>
-        <p>{{ product.name }}</p>
-        <p><strong class="text-primary h4">{{product.get_product_items.first.price }}TL</strong></p>
+        <h2 class="text-black">{{product.product.name}}</h2>
+        <p>{{product.product.description}}</p>
+
+        <p><strong class="text-primary h4">{{product.price}}TL</strong></p>
 
 
-        {% for variation in variations %}
-        
-        <h6>{{variation}}</h6>
         <hr>
 
+        <div class="mb-1 ">
+
+          {% for variation in product.variations.all %}
 
 
-        <div class="mb-1 d-flex">
+          {% ifchanged variation.variation_id.name %}
 
-          {% for option in variation.get_variation_options %}
+          <h4>
+            {{variation.variation_id.name }}
+          </h4>
 
-          <label for="option-{{option}}" class="d-flex mr-3 mb-3">
-            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio"
-                id="option-{{option}}" name="shop-{{variation}}"></span> <span
-              class="d-inline-block text-black">{{option}}</span>
-          </label>
+          {% endifchanged %}
+
+
+            <label for="option-{{variation}}"  class="flex m-2">
+              <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio"
+                  id="option-{{variation}}" name="{{variation.variation_id.name}}"></span> <span
+                class="d-inline-block text-black"> {{variation}}</span>
+            </label>
 
           {% endfor %}
-
         </div>
-        {% endfor %}
+
+        <hr>
+
 
         <div class="mb-5">
           <div class="input-group mb-3" style="max-width: 120px;">
@@ -58,5 +63,4 @@
     </div>
   </div>
 </div>
-
 {% endblock %}
