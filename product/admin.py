@@ -76,7 +76,7 @@ class VariationAdmin(admin.ModelAdmin):
 
 class variationOptionAdmin(admin.ModelAdmin):
     list_display = ["variation_id", "value"]
-
+    list_filter  =["value"]
 
 admin.site.register(Product, CategoryAdmin)
 

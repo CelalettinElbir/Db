@@ -69,7 +69,7 @@ def category_products(request, id):
         query_products = query_products.filter(variations__value=color_option)
 
 
-    paginator = Paginator(query_products, 1)
+    paginator = Paginator(query_products, 10)
 
     product_per_page = paginator.get_page(page_number)
     context = {

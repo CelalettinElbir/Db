@@ -4,7 +4,7 @@ from .views import index, category_products, product_detail
 
 
 urlpatterns = [
-    path("", index),
+    path("", index,name= "home"),
     path("product/<slug:slug>-<int:id>", product_detail, name="product_detail"),
 
     path('category/<int:id>',

@@ -53,8 +53,7 @@
                                         class="img-fluid"></a>
                             </figure>
                             <div class="block-4-text p-4">
-                                <h3><a href="{% url  'product_detail' product.slug  product.id %}">{{product.product.name
-                                        }}</a>
+                                <h3><a href="{% url  'product_detail' product.slug  product.id %}">{{product.product.name}}</a>
                                 </h3>
                                 <p class="mb-0">{{product.product.description|truncatewords:20}}</p>
                                 <p class="text-primary font-weight-bold"> {{product.price}} TL</p>

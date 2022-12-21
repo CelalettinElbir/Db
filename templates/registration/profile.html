@@ -1,0 +1,24 @@
+{% extends "base/base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+<div class="container py-5">
+  <h1>profile</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-primary" type="submit">Güncelle</button>
+    <a href="{% url 'password-reset'   %}" class="btn btn-light">şifre sıfırlamak ister misiniz?</a>
+
+
+
+  </form>
+  <form action="{% url 'delete-user'   %}" onSubmit="return confirm('silmek istediğinize emin misiniz?');">
+
+    <button class="btn btn-danger btn-block mt-5" type="submit">kullanıcıyı silmek ister misiniz</button>
+
+  </form>
+</div>
+
+{% endblock %}

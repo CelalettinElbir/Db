@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-mzmm#5%xjn2+4=(j)!=se*1o_#vlp16ujw#m&(t2ifbjte*#-(
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+CRISPY_TEMPLATE_PACK="bootstrap4"
 import os
 # Application definition
 
@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "product",
     "page",
-    "mptt"
+    "mptt",
+    "user",
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -105,6 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = BASE_DIR / "sent_emails"   
 
 
 # Internationalization
