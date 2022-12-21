@@ -3,22 +3,36 @@
 {% load crispy_forms_tags %}
 
 
-<div class="container py-5">
-  <h1>profile</h1>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button class="btn btn-primary" type="submit">Güncelle</button>
-    <a href="{% url 'password-reset'   %}" class="btn btn-light">şifre sıfırlamak ister misiniz?</a>
+<div class="col-md-6 mx-auto ">
 
 
+  <div class="container py-5">
+    <h1>profile</h1>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form|crispy }}
 
-  </form>
-  <form action="{% url 'delete-user'   %}" onSubmit="return confirm('silmek istediğinize emin misiniz?');">
+        <button class="btn btn-primary" type="submit">Güncelle</button>
 
-    <button class="btn btn-danger btn-block mt-5" type="submit">kullanıcıyı silmek ister misiniz</button>
+    </form>
+    <div class="d-flex justify-content-between">
+      <a href="{% url 'user-adresses'   %}" class="btn btn-primary mt-2">adresleri düzenle</a>
+      <a href="{% url 'password-reset'   %}" class="btn btn-light">şifre sıfırlamak ister misiniz?</a>
 
-  </form>
+      <form action="{% url 'delete-user'   %}" onSubmit="return confirm('silmek istediğinize emin misiniz?');">
+
+        <button class="btn btn-danger  mt-2" type="submit">kullanıcıyı silmek ister misiniz</button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
 </div>
+
+
+
 
 {% endblock %}

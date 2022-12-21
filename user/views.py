@@ -4,7 +4,7 @@ from user.forms import adressForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, SetPasswordForm
 from django.contrib.auth import authenticate, login, logout
 from .forms import UpdateUser
-from .models import Person
+# from .models import Person, Adress
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -84,3 +84,26 @@ def reset_password(request):
 @login_required
 def delete_user(request):
     request.user.delete()
+
+
+# @login_required
+def add_adress(request):
+    if request.method == 'POST':
+        form = adressForm(request.POST)
+        if form.is_valid():
+            form.save()
+            
+            # print(Person.objects.get(user= request.user.id).user_adress.add(form))
+            messages.success(request, "adress başarıyla Eklendi")
+        else:
+            messages.error(request, "adress eklenemedi")
+    else:
+        form = adressForm()
+        # deneme = deneme = Person.objects.filter(user__id  = request.user.id).first().user_adress.add(form.auto_id)
+    context = {
+        "form": form,
+        # "adresses": Person.objects.filter(
+        #     user__id=request.user.id).first(),
+            }
+
+    return render(request, template_name="registration/adresses.html", context=context)

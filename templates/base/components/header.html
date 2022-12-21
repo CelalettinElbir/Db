@@ -24,12 +24,15 @@
 
         <div class="col-6 col-md-4 order-3 order-md-3 text-right">
           <div class="site-top-icons">
+
             <ul>
               {% if user.is_authenticated %}
-
-
-              <li><a href="{% url 'user_profile'  %}"><span class="icon icon-person"></span></a></li>
-              <li><a href="{% url 'logout'  %}"><span class="icon icon-person"></span></a></li>
+              <li><a href="{% url 'user_profile'  %}"><span class="icon icon-person">Profile</span></a></li>
+              <li>
+                <form action="{% url 'logout'  %}" onsubmit="return confirm('çıkış yapmak istediğinize emin misiniz?')">
+                  <button type="submit" class="btn ">çıkış yap</button>
+                </form>
+              </li>
               {% else %}
               <li><a href="{% url 'login'  %}"><span class="icon icon-person"></span></a></li>
 
