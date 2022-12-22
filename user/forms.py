@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-# from .models import Adress, Person
+from .models import Adress, Person
 
 city_choices = ['Adana', 'Adıyaman', 'Afyon', 'Ağrı', 'Amasya', 'Ankara', 'Antalya', 'Artvin',
                 'Aydın', 'Balıkesir', 'Bilecik', 'Bingöl', 'Bitlis', 'Bolu', 'Burdur', 'Bursa', 'Çanakkale',
@@ -26,12 +26,15 @@ class updateUserPassword(forms.Form):
 
 
 class adressForm(forms.ModelForm):
-    pass
-#     class Meta:
-#         model = Adress
-#         fields = ("id", "name", "city", "district",
-#                   "neighborhood", "adress_line")
+    class Meta:
+        model = Adress
+        fields = ("id", "name", "city", "district",
+                  "neighborhood", "adress_line")
 
-    # def __init__(self, id, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.id = id
+class adressUpdateForm(forms.ModelForm):
+    is_default = forms.BooleanField()
+    class Meta:
+        model = Adress
+        fields = ("id", "name", "city", "district",
+                  "neighborhood", "adress_line","is_default")
+

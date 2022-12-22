@@ -8,8 +8,8 @@
 
 
 
-    <div class=" col-md-6  mb-2">
-        <h1>Login</h1>
+    <div class=" col-md-4  mb-2">
+        <h1>Yeni adres Ekle</h1>
         <form method="POST">
             {% csrf_token %}
             {{ form|crispy }}
@@ -17,25 +17,26 @@
         </form>
     </div>
 
-
-    <div class="col-md-6 mb-2">
+    <div class="col-md-8 mb-2">
 
         <h1>Adreslerim</h1>
         <div class="d-flex ">
             {% if adresses != None %}
             {% for adress in adresses.user_adress.all %}
-            <div class="card m-2" style="width: 18rem;">
+            <div class="card m-2" style="width: 25rem;">
                 <div class="card-header">
                     <h5 class="card-title">{{adress.name}}</h5>
+                    <h1>{{adresses.is_default}}</h1>
+                    <h5>varsya</h5>
                 </div>
                 <div class="card-body">
                     <h6 class="card-subtitle mb-2 text-muted">{{adress.neighborhood}}</h6>
 
                     <p class="card-text">{{adress.adress_line}}</p>
                     <p class="card-text">{{adress.city}} /{{adress.district}}</p>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                    <a href="{% url 'update_adress' adress.id %}" class="btn btn-primary">
                         Düzenle
-                    </button>
+                    </a>
                 </div>
             </div>
             {% endfor %}

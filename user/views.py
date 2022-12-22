@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from user.forms import adressForm
+from user.forms import adressForm,adressUpdateForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, SetPasswordForm
 from django.contrib.auth import authenticate, login, logout
 from .forms import UpdateUser
-# from .models import Person, Adress
+from .models import Person, Adress
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -66,6 +66,7 @@ def user_profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Kullanıcı başarıyla güncellendi ")
+            return redirect("home")
     return render(request=request, template_name="registration/profile.html", context={"form": form})
 
 
@@ -91,19 +92,39 @@ def add_adress(request):
     if request.method == 'POST':
         form = adressForm(request.POST)
         if form.is_valid():
-            form.save()
-            
-            # print(Person.objects.get(user= request.user.id).user_adress.add(form))
+            created_adress = form.save()
+            Person.objects.filter(user__id=request.user.id).first(
+            ).user_adress.add(created_adress)
             messages.success(request, "adress başarıyla Eklendi")
+            return redirect("home")
         else:
             messages.error(request, "adress eklenemedi")
     else:
         form = adressForm()
-        # deneme = deneme = Person.objects.filter(user__id  = request.user.id).first().user_adress.add(form.auto_id)
     context = {
         "form": form,
-        # "adresses": Person.objects.filter(
-        #     user__id=request.user.id).first(),
-            }
+        "adresses": Person.objects.filter(
+            user__id=request.user.id).first(),
+    }
 
     return render(request, template_name="registration/adresses.html", context=context)
+
+
+def update_adress(request, id):
+    if request.method == 'POST':
+        form = adressUpdateForm(request.POST,instance=Adress.objects.get(pk = id))
+        if form.is_valid():
+            form.save()
+            messages.success(request, "adress başarıyla güncellendi")
+            return redirect("home")
+        else:
+            messages.error(request, "adress güncellenemedi")
+    else:
+        form = adressUpdateForm(instance=Adress.objects.get(pk = id))
+    context = {
+        "form": form,
+        "adresses": Person.objects.filter(
+            user__id=request.user.id).first(),
+    }
+
+    return render(request, template_name="registration/update_adress.html", context=context)
