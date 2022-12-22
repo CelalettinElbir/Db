@@ -64,7 +64,7 @@ class Item(models.Model):
     product = models.ForeignKey(Product, models.CASCADE)
     sku = models.CharField(max_length=45, blank=True, null=True)
     in_stock = models.CharField(max_length=45, blank=True, null=True)
-    price = models.IntegerField(blank=True, null=True)
+    price = models.DecimalField(blank=True, null=True ,max_digits=10, decimal_places=2) 
     slug = models.SlugField(null=True, blank=True)
     product_image = models.ImageField(blank=True, upload_to="item/images")
     variations = models.ManyToManyField("VariationOption")
