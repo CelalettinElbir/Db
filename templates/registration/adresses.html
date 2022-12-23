@@ -34,9 +34,21 @@
 
                     <p class="card-text">{{adress.adress_line}}</p>
                     <p class="card-text">{{adress.city}} /{{adress.district}}</p>
-                    <a href="{% url 'update_adress' adress.id %}" class="btn btn-primary">
-                        Düzenle
-                    </a>
+                    <div class="d-flex justify-content-between">
+
+                        <a href="{% url 'update_adress' adress.id %}" class="btn btn-primary">
+                            Düzenle
+                        </a>
+                        <form action="{% url 'delete_adress' adress.id  %}"
+                            onsubmit="confirm('adresi silmek istediğinize emin misiniz?')" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="_method" value="delete">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+
+                    </div>
+
+
                 </div>
             </div>
             {% endfor %}

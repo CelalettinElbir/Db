@@ -1,12 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from user.forms import adressForm,adressUpdateForm
+from user.forms import adressForm, adressUpdateForm, updateAdressIsDefault
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, SetPasswordForm
 from django.contrib.auth import authenticate, login, logout
 from .forms import UpdateUser
-from .models import Person, Adress
+from .models import Person, Adress, Person_adresses
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView
 # Create your views here.
 
 
@@ -112,19 +113,46 @@ def add_adress(request):
 
 def update_adress(request, id):
     if request.method == 'POST':
-        form = adressUpdateForm(request.POST,instance=Adress.objects.get(pk = id))
-        if form.is_valid():
+        form = adressUpdateForm(
+            request.POST, instance=Adress.objects.get(pk=id))
+        is_default_form = updateAdressIsDefault(request.POST,
+            instance=Person_adresses.objects.get(adress__id=id))
+
+        if  is_default_form.is_valid() and form.is_valid() :
             form.save()
+            is_default_form.save()
+
             messages.success(request, "adress başarıyla güncellendi")
             return redirect("home")
-        else:
-            messages.error(request, "adress güncellenemedi")
+        # else:
+        #     messages.error(request, "adress güncellenemedi")
     else:
-        form = adressUpdateForm(instance=Adress.objects.get(pk = id))
+        form = adressUpdateForm(instance=Adress.objects.get(pk=id))
+        is_default_form = updateAdressIsDefault(
+            instance=Person_adresses.objects.get(adress__id=id))
     context = {
         "form": form,
+        "is_default_form": is_default_form,
         "adresses": Person.objects.filter(
             user__id=request.user.id).first(),
     }
 
     return render(request, template_name="registration/update_adress.html", context=context)
+
+
+def delete_adress(request, id):
+    obj = get_object_or_404(Adress, pk=id)
+    if request.method == 'POST':
+        obj.delete()
+        messages.success(request, "Adress başarıyla silindi!!")
+        return redirect("user-adresses")
+    else:
+        messages.error(request, "Adress silemedi")
+
+        return redirect("home")
+
+
+
+
+class PublisherListView(ListView):
+    model = 

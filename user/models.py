@@ -11,6 +11,7 @@ class Person(models.Model):
         "point", null=True, blank=True, default=0)
     user_adress = models.ManyToManyField(
         "Adress", through='Person_adresses', through_fields=('person', 'adress'),)
+    user_favorites = models.ManyToManyField("Item")
 
     def __str__(self) -> str:
         return self.user.username
@@ -31,7 +32,7 @@ class Adress(models.Model):
 class Person_adresses(models.Model):
     person = models.ForeignKey("Person", on_delete=models.CASCADE)
     adress = models.ForeignKey("Adress", on_delete=models.CASCADE)
-    is_default = models.BooleanField(blank=True)
+    is_default = models.BooleanField(default=False)
 
     def clean(self):
         # # Get all the instances of MyModel that have is_default set to True
@@ -65,16 +66,17 @@ class Credit_card(models.Model):
 
 
 
-class ShoppingCart(models.Model):
+class Shopping_cart(models.Model):
     user = models.OneToOneField(Person, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Item,through="Shopping_card_item",through_fields=('person', 'item'))
-
+    items = models.ManyToManyField(Item,through="Shopping_card_items",through_fields=('Shopping_cart', 'item'))
+    def __str__(self) -> str:
+        return self.user.user.username
 
 
 
 
 class Shopping_card_items(models.Model):
-    person = models.ForeignKey("Person", on_delete=models.CASCADE)
-    item = models.ForeignKey("Item", on_delete=models.CASCADE)
+    Shopping_cart = models.ForeignKey("Shopping_cart", on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     
