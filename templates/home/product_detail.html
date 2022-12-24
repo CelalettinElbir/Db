@@ -32,11 +32,11 @@
           {% endifchanged %}
 
 
-            <label for="option-{{variation}}"  class="flex m-2">
-              <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio"
-                  id="option-{{variation}}" name="{{variation.variation_id.name}}"></span> <span
-                class="d-inline-block text-black"> {{variation}}</span>
-            </label>
+          <label for="option-{{variation}}" class="flex m-2">
+            <span class="d-inline-block mr-2" style="top:-2px; position: relative;"><input type="radio"
+                id="option-{{variation}}" name="{{variation.variation_id.name}}"></span> <span
+              class="d-inline-block text-black"> {{variation}}</span>
+          </label>
 
           {% endfor %}
         </div>
@@ -57,7 +57,24 @@
           </div>
 
         </div>
-        <p><a href="cart.html" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
+
+
+        <div class="d-flex justify-content-between">
+
+
+          <form action="{%  url 'add_favorite'    product.id %}" method="POST">
+            {% csrf_token %}
+
+
+            <button type="submit" class="buy-now btn "><span class="icon icon-heart-o"></span></button>
+
+          </form>
+     
+
+
+          <p><a href="cart.html" class="buy-now btn btn-sm btn-primary">Add To Cart</a></p>
+        </div>
+
 
       </div>
     </div>

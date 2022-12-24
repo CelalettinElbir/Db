@@ -5,6 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, SetP
 from django.contrib.auth import authenticate, login, logout
 from .forms import UpdateUser
 from .models import Person, Adress, Person_adresses
+from product.models import Item
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
@@ -43,7 +44,6 @@ def user_login(request):
             else:
                 messages.error(request, "Invalid username or password.")
     else:
-        print("get")
 
         form = AuthenticationForm()
 
@@ -116,9 +116,9 @@ def update_adress(request, id):
         form = adressUpdateForm(
             request.POST, instance=Adress.objects.get(pk=id))
         is_default_form = updateAdressIsDefault(request.POST,
-            instance=Person_adresses.objects.get(adress__id=id))
+                                                instance=Person_adresses.objects.get(adress__id=id))
 
-        if  is_default_form.is_valid() and form.is_valid() :
+        if is_default_form.is_valid() and form.is_valid():
             form.save()
             is_default_form.save()
 
@@ -152,7 +152,40 @@ def delete_adress(request, id):
         return redirect("home")
 
 
+def user_favorite(request):
+    person = Person.objects.get(user__id=request.user.id)
+    context = {
+        "person": person
+    }
+    return render(request, template_name="registration/favorites.html", context=context)
 
 
-class PublisherListView(ListView):
-    model = 
+def remove_favorite(request, id):
+    if request.method == "POST":
+        deleted_favorite = Person.objects.get(
+            user__id=request.user.id).user_favorites.get(id = id)
+        Person.objects.get(
+            user__id=request.user.id).user_favorites.remove(deleted_favorite)
+
+        messages.success(request, "başarıyla silindi!")
+        return redirect("user_favorites")
+    else:
+        messages.success(request, "başarıyla silindi!")
+        return redirect("user_favorites")
+
+
+def add_favorite(request,id):
+    if request.method == "POST":
+        added_product = Item.objects.get(id = id)
+        Person.objects.get(user__id = request.user.id ).user_favorites.add(added_product) 
+        messages.success(request,"başaıryla favorilere eklendi")
+        return redirect("home")
+    else:
+        messages.success(request,"favorilere eklenemedi")
+
+
+
+
+def user_basket(request):
+
+    return render(request, template_name="registration/basket.html")

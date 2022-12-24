@@ -11,8 +11,8 @@ class Person(models.Model):
         "point", null=True, blank=True, default=0)
     user_adress = models.ManyToManyField(
         "Adress", through='Person_adresses', through_fields=('person', 'adress'),)
-    user_favorites = models.ManyToManyField("Item")
-
+    user_favorites = models.ManyToManyField(Item)
+    
     def __str__(self) -> str:
         return self.user.username
     # user_favorites = models.ManyToManyField("Item")

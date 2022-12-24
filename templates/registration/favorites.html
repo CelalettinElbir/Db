@@ -1,0 +1,51 @@
+{% extends "base/base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+
+
+
+{% if person.user_favorites.all %}
+<div class="d-flex container mb-5 mt-5">
+
+
+
+    {% for item in person.user_favorites.all %}
+
+    {{item.id}}
+    <div class="card m-2" style="width:400px">
+        <img class="card-img-top" src="{{item.product_image.url  }}" alt="Card image" style="width:100%">
+        <div class="card-body">
+            <h4 class="card-title"><a href="{%  url 'product_detail' item.slug item.id %}">{{item.product.name}}</a></h4>
+            <p class="card-text">{{item.product.description}}</p>
+            <div class="d-flex justify-content-between">
+
+
+                <a href="#" class="btn btn-primary">Sepete ekle </a>
+                
+                <form action="{%  url 'remove_favorite' item.id  %}" method="post">
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn btn-danger">X </button>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+    {% endfor %}
+
+    {% else %}
+
+    <h1 class="m-5 text-center">Favori ürününüz yok </h1>
+
+
+    {% endif %}
+
+</div>
+
+
+{% endblock %}

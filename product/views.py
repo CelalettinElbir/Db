@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import *
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+from user.models import Person
 # Create your views here.
 
 # def productCategory(request,categoryId):
@@ -68,7 +69,6 @@ def category_products(request, id):
     if color_option != "" and color_option is not None:
         query_products = query_products.filter(variations__value=color_option)
 
-
     paginator = Paginator(query_products, 10)
 
     product_per_page = paginator.get_page(page_number)
@@ -82,20 +82,18 @@ def category_products(request, id):
     return render(request, 'home/products.html', context)
 
 
-def product_detail(request, slug,id):
+def product_detail(request, slug, id):
     context = dict()
-    selectedProduct = Item.objects.get(id =id)
-    context = {
+    selectedProduct = Item.objects.get(id=id)
+  
 
+    context = {
+        # "is_favorite": favorite,
         "product": selectedProduct,
         "categories": Category.objects.all(),
-        # 'variations': Variation.objects.filter(product_category=selectedProduct.product_category.id),
 
     }
 
     return render(request, 'home/product_detail.html', context)
 
-#yapılacaklar 
-#ilk olarak itema slug ekledim 
-#o sluga özel olarak detail sayfasına gitmesini sağla 
-#sonra detail sayfasını düzenle
+
