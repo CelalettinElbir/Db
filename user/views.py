@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from user.forms import adressForm, adressUpdateForm, updateAdressIsDefault
+from user.forms import adressForm, adressUpdateForm, updateAdressIsDefault, CreditCardCreateForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, SetPasswordForm
 from django.contrib.auth import authenticate, login, logout
 from .forms import UpdateUser
-from .models import Person, Adress, Person_adresses
+from .models import Person, Adress, Person_adresses, Shopping_basket_items, Shopping_basket, Credit_card
 from product.models import Item
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
+from django.http import HttpResponseForbidden
+from django.db.models import Sum
 # Create your views here.
 
 
@@ -35,8 +37,6 @@ def user_login(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
-                print("Girdi")
-
                 login(request, user)
                 messages.success(
                     request, f"You are now logged in as {username}.")
@@ -154,8 +154,11 @@ def delete_adress(request, id):
 
 def user_favorite(request):
     person = Person.objects.get(user__id=request.user.id)
+    items_in_basket = Shopping_basket_items.objects.filter(
+        Shopping_basket__user__user=request.user)
     context = {
-        "person": person
+        "person": person,
+        "items_in_basket": items_in_basket
     }
     return render(request, template_name="registration/favorites.html", context=context)
 
@@ -163,7 +166,7 @@ def user_favorite(request):
 def remove_favorite(request, id):
     if request.method == "POST":
         deleted_favorite = Person.objects.get(
-            user__id=request.user.id).user_favorites.get(id = id)
+            user__id=request.user.id).user_favorites.get(id=id)
         Person.objects.get(
             user__id=request.user.id).user_favorites.remove(deleted_favorite)
 
@@ -174,18 +177,128 @@ def remove_favorite(request, id):
         return redirect("user_favorites")
 
 
-def add_favorite(request,id):
+def add_favorite(request, id):
     if request.method == "POST":
-        added_product = Item.objects.get(id = id)
-        Person.objects.get(user__id = request.user.id ).user_favorites.add(added_product) 
-        messages.success(request,"başaıryla favorilere eklendi")
+        added_product = Item.objects.get(id=id)
+        Person.objects.get(
+            user__id=request.user.id).user_favorites.add(added_product)
+        messages.success(request, "başaıryla favorilere eklendi")
         return redirect("home")
     else:
-        messages.success(request,"favorilere eklenemedi")
-
-
+        messages.success(request, "favorilere eklenemedi")
 
 
 def user_basket(request):
+    if request.method == "POST":
+        basket_value = request.POST["basket_value"]
+        item_sku = request.POST["item_sku"]
+        if basket_value and item_sku:
+            updated_item = Shopping_basket_items.objects.filter(
+                Shopping_basket__user__user__id=request.user.id, item__sku=item_sku)
+            updated_item.update(quantity=basket_value)
+            messages.success(
+                request, f"{updated_item.first().item.product.name} başarıyla gübcellendi")
 
-    return render(request, template_name="registration/basket.html")
+            return redirect("user_basket")
+        else:
+            return redirect("user_basket")
+
+    person_basket_items = Shopping_basket_items.objects.filter(
+        Shopping_basket__user__user__id=request.user.id)
+
+    total_price = 0
+    for item in person_basket_items:
+        total_price += item.item.price * item.quantity
+
+    context = {
+        "person_basket_items": person_basket_items,
+        "total_price": total_price
+
+    }
+    return render(request, template_name="registration/basket.html", context=context)
+
+
+def delete_basket_item(request, id):
+    if request.method == "POST":
+        deleted_item = Item.objects.get(id=id)
+        print("deneme")
+        basket = Shopping_basket.objects.get(user__user=request.user)
+        basket_items = basket.items.remove(deleted_item)
+        messages.success(request, "başarıyla silindi")
+        return redirect("user_basket")
+
+    else:
+        messages.error(request, "silinemedi")
+        return redirect("user_basket")
+
+
+def add_basket_item(request, id):
+
+    print(request.POST)
+    if request.method == "POST":
+        added_item = Item.objects.get(id=id)
+        person_basket = Shopping_basket.objects.get(
+            user__user__id=request.user.id)
+        Shopping_basket_items.objects.create(
+            Shopping_basket=person_basket, item=added_item, quantity=1)
+        messages.success(request, "başarıyla eklendi")
+        return redirect("user_basket")
+    else:
+        messages.error(request, "silinemedi")
+        return redirect("home")
+
+
+def user_credit_cards(request):
+    if request.method == "POST":
+        form = CreditCardCreateForm(request.POST)
+        if form.is_valid():
+            deneme = form.save(commit=False)
+            deneme.person = Person.objects.get(user=request.user)
+            form.save()
+            messages.success(request, "card is saved successfully")
+            return redirect("user_credit_cards")
+        else:
+            messages.error(request, "card can't be saved!!")
+            return redirect("user_credit_cards")
+
+    else:
+        form = CreditCardCreateForm()
+    user_cards = Credit_card.objects.filter(person__user=request.user)
+    context = {
+        "credit_cards": user_cards,
+        "CreditCardCreateForm": form
+
+    }
+    return render(request, template_name="registration/credit-card.html", context=context)
+
+
+def delete_credit_card(request, id):
+    if request.method == "POST":
+        Credit_card.objects.get(id=id).delete()
+        messages.success(request, "başarıyla silindi")
+        return redirect("home")
+
+
+def update_credit_card(request, id):
+    updated_credit_card = Credit_card.objects.get(id=id)
+
+    if request.method == "POST":
+        form = CreditCardCreateForm(
+            data=request.POST, instance=updated_credit_card)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "başarıyla güncelledi")
+            return redirect("user_credit_cards")
+
+        else:
+            messages.error(request, "bilgiler yanlış")
+
+    else:
+        form = CreditCardCreateForm(instance=updated_credit_card)
+
+    context = {
+        "CreditCardCreateForm": form
+
+    }
+
+    return render(request, template_name="registration/update-credit-card.html", context=context)

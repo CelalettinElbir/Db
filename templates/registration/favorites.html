@@ -17,13 +17,37 @@
     <div class="card m-2" style="width:400px">
         <img class="card-img-top" src="{{item.product_image.url  }}" alt="Card image" style="width:100%">
         <div class="card-body">
-            <h4 class="card-title"><a href="{%  url 'product_detail' item.slug item.id %}">{{item.product.name}}</a></h4>
+            <h4 class="card-title"><a href="{%  url 'product_detail' item.slug item.id %}">{{item.product.name}}</a>
+            </h4>
             <p class="card-text">{{item.product.description}}</p>
             <div class="d-flex justify-content-between">
 
 
-                <a href="#" class="btn btn-primary">Sepete ekle </a>
-                
+                <form action="{%  url 'add_basket_item' item.id  %}" method="post">
+                    {% csrf_token %}
+
+
+                    {% if items_in_basket %}
+
+                    {% for basket_item in items_in_basket %}
+                    {% if basket_item.item.id == item.id %}
+                    <button type="submit" class="btn btn-primary" disabled="true">sepete eklendi</button>
+                    <input type="hidden" name="quantity" value="1">
+                    {% else %}
+                    <button type="submit" class="btn btn-primary">sepete ekle</button>
+                    {% endif %}
+
+                    {% endfor %}
+                    {% else %}
+                    <button type="submit" class="btn btn-primary">sepete ekle </button>
+
+                    {% endif %}
+
+
+
+                </form>
+
+
                 <form action="{%  url 'remove_favorite' item.id  %}" method="post">
                     {% csrf_token %}
 

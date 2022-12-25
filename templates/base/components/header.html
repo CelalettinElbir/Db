@@ -40,7 +40,7 @@
               {% endif %}
               <li><a href="{% url 'user_favorites'  %}"><span class="icon icon-heart-o"></span></a></li>
               <li>
-                <a href="cart.html" class="site-cart">
+                <a href="{% url 'user_basket' %}" class="site-cart">
                   <span class="icon icon-shopping_cart"></span>
                   <span class="count">2</span>
                 </a>

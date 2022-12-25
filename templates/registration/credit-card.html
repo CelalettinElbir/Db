@@ -1,0 +1,78 @@
+{% extends "base/base.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+
+
+
+<div class="row container mx-auto">
+
+
+
+    <div class=" col-md-4  mb-2">
+        <h1>kredi kartı ekle</h1>
+        <form method="POST" action="{% url 'user_credit_cards' %}">
+            {% csrf_token %}
+            {{ CreditCardCreateForm|crispy }}
+            <button class="btn btn-primary" type="submit">kaydet</button>
+        </form>
+    </div>
+
+    <div class="col-md-8 mb-2">
+
+        <h1>Kredi kartlarım</h1>
+        <div class="d-flex ">
+            {% if credit_cards != None %}
+            {% for credit_card in credit_cards %}
+            <div class="card m-2" style="width: 25rem;">
+                <div class="card-header">
+                    <h5 class="card-title">{{credit_card.name}}</h5>
+                    <h6>{{credit_card.provider}}</h6>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Card number: {{credit_card.card_number}}</h6>
+
+                    <p class="card-text">expiration date: {{credit_card.expiration_date|date:"m/d Y "}}</p>
+                    <p class="card-text">security code: {{credit_card.security_code}} </p>
+
+
+                    <div class="d-flex justify-content-between">
+
+                        <a href="{% url 'update_credit_card'  credit_card.id  %}" class="btn btn-primary">edit</a>
+
+                        <form action="{% url 'delete_credit_card' credit_card.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">delete</button>
+                        </form>
+
+
+                    </div>
+
+
+
+                </div>
+            </div>
+            {% endfor %}
+
+
+
+            {% endif %}
+
+
+            <!-- Button trigger modal -->
+
+
+
+
+
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}

@@ -12,10 +12,15 @@ class Person(models.Model):
     user_adress = models.ManyToManyField(
         "Adress", through='Person_adresses', through_fields=('person', 'adress'),)
     user_favorites = models.ManyToManyField(Item)
-    
+
     def __str__(self) -> str:
         return self.user.username
-    # user_favorites = models.ManyToManyField("Item")
+
+    # def save(self, *args, **kwargs):
+    #     if self.pk is None:  # create
+    #         deneme = Shopping_basket(user= self)
+    #         deneme.save()
+    #     super().save(*args, **kwargs)
 
 
 class Adress(models.Model):
@@ -65,18 +70,20 @@ class Credit_card(models.Model):
             raise ValidationError("sadece bir tane varsayılan ayarlanabilir.")
 
 
-
-class Shopping_cart(models.Model):
+class Shopping_basket(models.Model):
     user = models.OneToOneField(Person, on_delete=models.CASCADE)
-    items = models.ManyToManyField(Item,through="Shopping_card_items",through_fields=('Shopping_cart', 'item'))
+    items = models.ManyToManyField(
+        Item, through="Shopping_basket_items", through_fields=('Shopping_basket', 'item'), null=True, blank=True)
+
     def __str__(self) -> str:
         return self.user.user.username
 
 
+class Shopping_basket_items(models.Model):
+    Shopping_basket = models.ForeignKey(
+        "Shopping_basket", on_delete=models.CASCADE, null=True, blank=True)
+    item = models.ForeignKey(Item, on_delete=models.DO_NOTHING)
+    quantity = models.PositiveIntegerField(default=1)
 
-
-class Shopping_card_items(models.Model):
-    Shopping_cart = models.ForeignKey("Shopping_cart", on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
-    
+    def save(self, *args, **kwargs):
+        super(Shopping_basket_items, self).save(*args, **kwargs)

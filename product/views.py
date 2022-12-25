@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import *
 from django.http import HttpResponse
 from django.core.paginator import Paginator
-from user.models import Person
+from user.models import Person,Shopping_basket
 # Create your views here.
 
 # def productCategory(request,categoryId):
@@ -84,11 +84,13 @@ def category_products(request, id):
 
 def product_detail(request, slug, id):
     context = dict()
+    
     selectedProduct = Item.objects.get(id=id)
-  
+    is_in_basket  = Shopping_basket.objects.get(user__user__id = request.user.id).items.filter(id = id )
+   
 
     context = {
-        # "is_favorite": favorite,
+        "is_in_basket":is_in_basket,
         "product": selectedProduct,
         "categories": Category.objects.all(),
 

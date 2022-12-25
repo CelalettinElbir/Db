@@ -1,100 +1,100 @@
 {% extends "base/base.html" %}
 {% block content %}
 {% load crispy_forms_tags %}
-
+<meta name="csrf-token" content="{% csrf_token %}">
 <div class="site-section">
-    <div class="container">
-      <div class="row mb-5">
-        <form class="col-md-12" method="post">
-          <div class="site-blocks-table">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th class="product-thumbnail">Image</th>
-                  <th class="product-name">Product</th>
-                  <th class="product-price">Price</th>
-                  <th class="product-quantity">Quantity</th>
-                  <th class="product-total">Total</th>
-                  <th class="product-remove">Remove</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="product-thumbnail">
-                    <img src="images/cloth_1.jpg" alt="Image" class="img-fluid">
-                  </td>
-                  <td class="product-name">
-                    <h2 class="h5 text-black">Top Up T-Shirt</h2>
-                  </td>
-                  <td>$49.00</td>
-                  <td>
-                    <div class="input-group mb-3" style="max-width: 120px;">
-                      <div class="input-group-prepend">
-                        <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
-                      </div>
-                      <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                      <div class="input-group-append">
-                        <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
-                      </div>
+  <div class="container">
+    <div class="row mb-5">
+      <form class="col-md-12" method="post">
+        <div class="site-blocks-table">
+          {% if person_basket_items %}
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th class="product-thumbnail">Image</th>
+                <th class="product-name">Product</th>
+                <th class="product-price">Price</th>
+                <th class="product-quantity">Quantity</th>
+                <th class="product-total">Total</th>
+
+                <th class="product-remove">Remove</th>
+
+              </tr>
+            </thead>
+            <tbody>
+
+              {% for basket_item in person_basket_items %}
+
+              <tr>
+
+                <td class="product-thumbnail">
+                  <img src="{{basket_item.item.product_image.url  }}" alt="Image" class="img-fluid">
+                </td>
+                <td class="product-name">
+                  <h2 class="h5 text-black"> {{basket_item.item}}</h2>
+                </td>
+                <td>{{basket_item.item.price}} TL</td>
+
+                <!-- <td>
+                  <div class="input-group mb-3" style="max-width: 120px;">
+                    <div class="input-group-prepend">
+                      <button class="btn btn-outline-primary js-btn-minus item-{{basket_item.id}}" type="button">&minus;</button>
                     </div>
-
-                  </td>
-                  <td>$49.00</td>
-                  <td><a href="#" class="btn btn-primary btn-sm">X</a></td>
-                </tr>
-
-                <tr>
-                  <td class="product-thumbnail">
-                    <img src="images/cloth_2.jpg" alt="Image" class="img-fluid">
-                  </td>
-                  <td class="product-name">
-                    <h2 class="h5 text-black">Polo Shirt</h2>
-                  </td>
-                  <td>$49.00</td>
-                  <td>
-                    <div class="input-group mb-3" style="max-width: 120px;">
-                      <div class="input-group-prepend">
-                        <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
-                      </div>
-                      <input type="text" class="form-control text-center" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                      <div class="input-group-append">
-                        <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
-                      </div>
+                    <input type="text" class="form-control text-center basketAmount" value="{{basket_item.quantity}}"
+                      placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-primary js-btn-plus item-{{basket_item.id}}" type="button">&plus;</button>
                     </div>
+                  </div>
 
-                  </td>
-                  <td>$49.00</td>
-                  <td><a href="#" class="btn btn-primary btn-sm">X</a></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </form>
-      </div>
+                </td> -->
+                <td class="d-flex mt-4">
+                  <form action="{% url 'user_basket' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_sku" value="{{basket_item.item.sku}}">
+                    <input type="number" min="0" step="1" name="basket_value" value="{{basket_item.quantity}}" />
+                    <!-- <input type="number" name="color" value="{{basket_item.quantity}}" /> -->
+                    <!-- <input type="number" name="size" value="{{basket_item.quantity}}" /> -->
 
+                    <button><span></span>güncelle </button>
+
+                  </form>
+                </td>
+                <td>{% widthratio basket_item.quantity 1 basket_item.item.price %} TL</td>
+                <td>
+                  <form action="{%  url 'delete_basket_item'  basket_item.item.id %}" method="post">
+                    {% csrf_token %}
+                    <button>X</button>
+                  </form>
+                </td>
+
+              </tr>
+
+
+
+
+
+              {% endfor %}
+              {% else %}
+              <h2>Sepetinizde ürün yok</h2>
+              {% endif %}
+
+
+
+
+
+            </tbody>
+          </table>
+        </div>
+      </form>
       <div class="row">
         <div class="col-md-6">
           <div class="row mb-5">
-            <div class="col-md-6 mb-3 mb-md-0">
-              <button class="btn btn-primary btn-sm btn-block">Update Cart</button>
-            </div>
-            <div class="col-md-6">
-              <button class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <label class="text-black h4" for="coupon">Coupon</label>
-              <p>Enter your coupon code if you have one.</p>
-            </div>
-            <div class="col-md-8 mb-3 mb-md-0">
-              <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
-            </div>
-            <div class="col-md-4">
-              <button class="btn btn-primary btn-sm">Apply Coupon</button>
-            </div>
+          
           </div>
         </div>
+        {% if person_basket_items %}
         <div class="col-md-6 pl-5">
           <div class="row justify-content-end">
             <div class="col-md-7">
@@ -104,33 +104,36 @@
                 </div>
               </div>
               <div class="row mb-3">
-                <div class="col-md-6">
-                  <span class="text-black">Subtotal</span>
-                </div>
-                <div class="col-md-6 text-right">
-                  <strong class="text-black">$230.00</strong>
-                </div>
+
               </div>
               <div class="row mb-5">
                 <div class="col-md-6">
                   <span class="text-black">Total</span>
                 </div>
                 <div class="col-md-6 text-right">
-                  <strong class="text-black">$230.00</strong>
+                  <strong class="text-black">${{total_price}}</strong>
                 </div>
               </div>
 
               <div class="row">
                 <div class="col-md-12">
-                  <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Proceed To Checkout</button>
+                  <button class="btn btn-primary btn-lg py-3 btn-block"
+                    onclick="window.location='checkout.html'">Proceed To Checkout</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      {% endif %}
+
     </div>
   </div>
+
+</div>
+</div>
+
+
 
 
 

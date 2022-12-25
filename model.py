@@ -197,7 +197,7 @@ class ShoppingCard(models.Model):
         db_table = 'shopping_card'
         unique_together = (('id', 'user'),)
 
-
+  
 class ShoppingCardItem(models.Model):
     shopping_card = models.ForeignKey(ShoppingCard, models.DO_NOTHING)
     product_item = models.ForeignKey(ProductItem, models.DO_NOTHING)
@@ -273,3 +273,6 @@ class VariationOption(models.Model):
     class Meta:
         managed = False
         db_table = 'variation_option'
+
+
+
