@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "page",
     "mptt",
     "user",
-    "shop_order"
+    "shop_order",
     'crispy_forms',
 ]
 

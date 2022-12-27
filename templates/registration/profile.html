@@ -8,7 +8,7 @@
 
   <div class="container py-5">
     <h1>profile</h1>
-    <form method="POST" >
+    <form method="POST">
       {% csrf_token %}
       {{ form|crispy }}
 
@@ -25,6 +25,9 @@
       </form>
 
       <a href="{% url 'user_credit_cards'   %}" class="btn btn-primary">Kredi kartı </a>
+
+
+      <a href="{% url 'orders'   %}" class="btn btn-primary">Siparişlerim </a>
 
     </div>
 

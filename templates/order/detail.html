@@ -1,0 +1,67 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+
+
+
+<div class="row m-5">
+    <div class="col-md-6 mx-auto">
+
+        <div class="card m-2 " >
+            <div class="card-header">
+                <h3 class="text-center">Order Items</h3>
+
+            </div>
+
+
+        </div>
+        <div class="card-body">
+
+
+
+            <div class="table-responsive">
+                <table class="table ">
+                    <thead class="">
+                        <tr>
+                            <th scope="col">item</th>
+                            <th scope="col">price</th>
+                            <th scope="col">quantity</th>
+                            <th scope="col">total</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in shop_order_items %}
+
+                        <tr>
+                            <td>{{item.product_item.product.name}}</td>
+                            <td>{{item.price}} TL</td>
+                            <td>{{item.quantity}}</td>
+                            <td>{% widthratio item.price 1 item.quantity %}</td>
+
+                        </tr>
+                        {% endfor %}
+
+                      
+                    </tbody>
+                </table>
+                <hr>
+                <p class="text-right ">Total Price = {{total}}</p>
+
+            </div>
+            <h1>{{item.product_item.product.name}} </h1>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+{% endblock content %}

@@ -2,9 +2,7 @@ from django.db import models
 from user.models import *
 # Create your models here.
 
-# Todo: her kullanıcının birden fazla şiparişi var 
-
-
+# Todo: her kullanıcının birden fazla şiparişi var
 
 
 class ShopOrder(models.Model):
@@ -20,10 +18,9 @@ class OrderStatus(models.Model):
                ('Shipped', 'Shipped'),
                ('In Progress', 'In Progress'),
                )
-    shop_order = models.ForeignKey(ShopOrder, models.DO_NOTHING)
-    status = models.Choices(
-        max_length=45, choices=choices, blank=True, null=True)
-
+    shop_order = models.ForeignKey(ShopOrder, models.CASCADE)
+    status = models.CharField(
+        max_length=45, choices=choices, blank=True, null=True, default="In Progress")
 
 
 class ShopOrderItems(models.Model):
@@ -31,4 +28,3 @@ class ShopOrderItems(models.Model):
     product_item = models.ForeignKey(Item, models.DO_NOTHING)
     price = models.IntegerField(blank=True, null=True)
     quantity = models.IntegerField(blank=True, null=True)
-

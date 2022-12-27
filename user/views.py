@@ -234,7 +234,6 @@ def delete_basket_item(request, id):
 
 def add_basket_item(request, id):
 
-    print(request.POST)
     if request.method == "POST":
         added_item = Item.objects.get(id=id)
         person_basket = Shopping_basket.objects.get(

@@ -1,0 +1,37 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+
+{% for shop_order in shop_orders %}
+
+<div class="row m-5">
+    <div class="col-md-6 mx-auto">
+
+        <div class="card m-2">
+            <div class="card-body d-flex justify-content-around    ">
+
+
+                <h4>Sipariş Tarihi :{{shop_order.order_date}} </h4>
+                <h4>Alıcı :{{shop_order.user.user.username}} </h4>
+                <h4>Tutar : {{shop_order.order_total}}</h4>
+                <h4>adress : {{shop_order.address.city}}</h4>
+            </div>
+
+            <a href="{% url 'order-detail' shop_order.pk %}" class="btn btn-primary">Siariş Detayı</a>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+{% endfor %}
+
+
+{% endblock content %}
