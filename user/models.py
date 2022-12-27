@@ -67,7 +67,7 @@ class Credit_card(models.Model):
         # # If there are any other instances with is_default set to True, and this instance
         # # is being set to True as well, raise a validation error
         if default_instances.exclude(pk=self.pk).exists() and self.is_default:
-            raise ValidationError("sadece bir tane varsayılan ayarlanabilir.")
+            raise ValidationError("Sadece bir tane varsayılan ayarlanabilir.")
 
 
 class Shopping_basket(models.Model):

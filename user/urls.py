@@ -25,8 +25,5 @@ urlpatterns = [
          delete_credit_card, name="delete_credit_card"),
     path("credit-card/<int:id>/update",
          update_credit_card, name="update_credit_card"),
-
-
-
-
+    path("buy-basket", buy_basket, name="buy-basket")
 ]

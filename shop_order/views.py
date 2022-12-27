@@ -3,6 +3,7 @@ from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from .models import *
+
 # Create your views here.
 
 # TODO: fişleri görüntüle
@@ -41,3 +42,6 @@ class shopOrderDetailView(DetailView):
         context["total"] = total
 
         return context
+
+
+

@@ -10,6 +10,7 @@ class ShopOrder(models.Model):
     order_date = models.DateField(blank=True, null=True)
     address = models.ForeignKey(Adress, models.DO_NOTHING)
     order_total = models.IntegerField(blank=True, null=True)
+    shop_order = models.ForeignKey("OrderStatus", models.DO_NOTHING)
 
 
 class OrderStatus(models.Model):
@@ -18,7 +19,6 @@ class OrderStatus(models.Model):
                ('Shipped', 'Shipped'),
                ('In Progress', 'In Progress'),
                )
-    shop_order = models.ForeignKey(ShopOrder, models.CASCADE)
     status = models.CharField(
         max_length=45, choices=choices, blank=True, null=True, default="In Progress")
 

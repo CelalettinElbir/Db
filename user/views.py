@@ -8,9 +8,8 @@ from .models import Person, Adress, Person_adresses, Shopping_basket_items, Shop
 from product.models import Item
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView
-from django.http import HttpResponseForbidden
-from django.db.models import Sum
+from django.views import View
+
 # Create your views here.
 
 
@@ -301,3 +300,33 @@ def update_credit_card(request, id):
     }
 
     return render(request, template_name="registration/update-credit-card.html", context=context)
+
+
+def buy_basket(request):
+    if request.method == "POST":
+        print(request.data)
+
+    person = Person.objects.get(user=request.user)
+    person_default_adress = Person_adresses.objects.filter(
+        person=person, is_default=True)
+
+    person_default_credit_card = Credit_card.objects.filter(
+        person=person, is_default=True)
+
+    person_basket_items = Shopping_basket_items.objects.filter(
+        Shopping_basket__user=person)
+
+    total_price = 0
+    for item in person_basket_items:
+        total_price += item.item.price * item.quantity
+
+    context = {
+        'person': person,
+        "person_default_adress": person_default_adress,
+        "person_default_credit_card": person_default_credit_card,
+        "person_basket_items": person_basket_items,
+        "total_price": total_price
+
+    }
+
+    return render(request, template_name="registration/buy-product.html", context=context)
