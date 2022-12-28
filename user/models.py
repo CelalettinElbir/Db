@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from product.models import Item
 from django.core.exceptions import ValidationError
+from shop_order.models import ShopOrderItems
 # Create your models here.
 
 
@@ -87,3 +88,14 @@ class Shopping_basket_items(models.Model):
 
     def save(self, *args, **kwargs):
         super(Shopping_basket_items, self).save(*args, **kwargs)
+
+
+class user_review(models.Model):
+    user = models.ForeignKey(Person,on_delete=models.DO_NOTHING,related_name="reviews")
+    Shop_order_item = models.ForeignKey(ShopOrderItems,on_delete=models.DO_NOTHING,related_name = "item_comments") 
+    comment = models.CharField(max_length=45)
+    star = models.PositiveIntegerField()
+    user_review_photos = models.ImageField()
+
+
+    

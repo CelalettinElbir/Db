@@ -6,9 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import UpdateUser
 from .models import Person, Adress, Person_adresses, Shopping_basket_items, Shopping_basket, Credit_card
 from product.models import Item
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.views import View
+from shop_order.models import *
 
 # Create your views here.
 
@@ -304,7 +303,25 @@ def update_credit_card(request, id):
 
 def buy_basket(request):
     if request.method == "POST":
-        print(request.data)
+        person = Person.objects.get(user=request.user)
+        order_total_price = float(request.POST["order-total"])
+        credit_card_id = int(request.POST["credit_card_id"])
+        order_adress_id = int(request.POST["adress_id"])
+        order_adress = Adress.objects.get(id=order_adress_id)
+        credit_card_ = Credit_card.objects.get(id=credit_card_id)
+        person_basket_items = Shopping_basket_items.objects.filter(
+            Shopping_basket__user=person)
+
+        # order'ı oluşturdum
+        shop_order = ShopOrder.objects.create(
+            user=person, address=order_adress, order_total=order_total_price)
+        # basketi temizle
+        for basket_item in person_basket_items:
+            ShopOrderItems.objects.create(
+                shop_order=shop_order, product_item=basket_item.item, price=basket_item.item.price, quantity=basket_item.quantity)
+            basket_item.delete()
+        messages.success(request, "şiparış başarıyla oluşturuldu.")
+        return redirect("home")
 
     person = Person.objects.get(user=request.user)
     person_default_adress = Person_adresses.objects.filter(
@@ -330,3 +347,5 @@ def buy_basket(request):
     }
 
     return render(request, template_name="registration/buy-product.html", context=context)
+
+

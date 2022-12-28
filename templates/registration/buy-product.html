@@ -113,14 +113,12 @@
                             </table>
 
 
-
-
-
                             <form method="post" action="{% url 'buy-basket' %}">
-                                <input type="hidden" name = "order-total">
-                                <input type="hidden" name = "adress_id">
-                                <input type="hidden" name = "">
-
+                                {% csrf_token %}
+                                <input type="hidden" name="order-total" value="{{total_price}}">
+                                <input type="hidden" name="credit_card_id"
+                                    value="{{person_default_credit_card.first.id}}">
+                                <input type="hidden" name="adress_id" value="{{person_default_adress.first.id}}">
                                 <button type="submit" class="btn btn-primary btn-block">Sipariş Ver</button>
                             </form>
 
@@ -130,7 +128,6 @@
 
             </div>
         </div>
-        <!-- </form> -->
     </div>
 </div>
 

@@ -1,16 +1,16 @@
 from django.db import models
-from user.models import *
+
 # Create your models here.
 
 # Todo: her kullanıcının birden fazla şiparişi var
 
 
 class ShopOrder(models.Model):
-    user = models.ForeignKey(Person, models.DO_NOTHING)
-    order_date = models.DateField(blank=True, null=True)
-    address = models.ForeignKey(Adress, models.DO_NOTHING)
+    user = models.ForeignKey("user.Person", models.DO_NOTHING)
+    order_date = models.DateField(auto_now_add=True,blank=True,null=True)
+    address = models.ForeignKey("user.Adress", models.DO_NOTHING)
     order_total = models.IntegerField(blank=True, null=True)
-    shop_order = models.ForeignKey("OrderStatus", models.DO_NOTHING)
+    order_status = models.ForeignKey("OrderStatus", models.DO_NOTHING,blank=True,null=True)
 
 
 class OrderStatus(models.Model):
@@ -24,7 +24,10 @@ class OrderStatus(models.Model):
 
 
 class ShopOrderItems(models.Model):
-    shop_order = models.ForeignKey(ShopOrder, models.DO_NOTHING)
-    product_item = models.ForeignKey(Item, models.DO_NOTHING)
+    shop_order = models.ForeignKey(ShopOrder, models.DO_NOTHING,related_name="items")
+    product_item = models.ForeignKey("product.Item", models.DO_NOTHING)
     price = models.IntegerField(blank=True, null=True)
-    quantity = models.IntegerField(blank=True, null=True)
+    quantity = models.IntegerField(blank=True, null=True,default=1)
+
+
+
