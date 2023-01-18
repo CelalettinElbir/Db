@@ -26,6 +26,7 @@
 
 
 ### How to Use the Project
+
 When you enter the website you will see a page where you can filter by categories.
 
 
@@ -44,11 +45,13 @@ in the profile, the page user can edit and update his addresses, credit card, an
 
 ![image](https://user-images.githubusercontent.com/73540960/213202810-8af8216e-02ef-48a1-ade4-18388e046ae8.png)
 
-### favorite page
+### Favorite Page
+
 On the favorites page, you can add the product to the card or delete it from favorites.
 ![image](https://user-images.githubusercontent.com/73540960/213203778-28b6457f-3d4f-4adf-80c9-e4f924fa9cb6.png)
 
 ### Shop Basket Page
+
 you can edit the amount of product and delete your productsç
 ![image](https://user-images.githubusercontent.com/73540960/213210187-3a983e38-fb08-4539-b4e8-175da3856f23.png)
 
@@ -58,32 +61,29 @@ you need to set the default address and credit card to buy items.
 
 ![image](https://user-images.githubusercontent.com/73540960/213210932-3f0aa695-ec51-4f76-9787-b3acd4ea27d5.png)
 
-### address page
+### Address Page
 
 ![image](https://user-images.githubusercontent.com/73540960/213211129-a542b5b1-5a7a-4f28-90c4-8cc8abaf7ecf.png)
 
 
-### credit card page
+### Credit Card Page
 
 ![image](https://user-images.githubusercontent.com/73540960/213211223-efc9e534-f269-488f-86ed-e1a2887342dc.png)
 
 
-### order page 
+### Order Page 
+
 after you bought your items. you can add see the product you bought. you can go previous order page from your profile.
 
 ![image](https://user-images.githubusercontent.com/73540960/213212436-269afee7-adc2-4838-96ba-1cef1d8d1a6a.png)
 
-### order detail page
+### Order Detail Page
 
 On the order detail page, you can see the items and add comments.
 
-### add comment page 
+### Add Comment Page 
 
 ![image](https://user-images.githubusercontent.com/73540960/213212921-4741b9af-e2af-4e13-8e91-7e95687f15a0.png)
-
-
-
-
 
 
 
