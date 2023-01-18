@@ -44,9 +44,27 @@ in profile page user can edit update his adresses , creadit card , personal info
 
 ![image](https://user-images.githubusercontent.com/73540960/213202810-8af8216e-02ef-48a1-ade4-18388e046ae8.png)
 
-#favorite page
+# favorite page
 in favorites page you can add product to card or delete it from favorites.
 ![image](https://user-images.githubusercontent.com/73540960/213203778-28b6457f-3d4f-4adf-80c9-e4f924fa9cb6.png)
+
+# Shop Basket Page
+you can edit amount of product and delete your productsç
+![image](https://user-images.githubusercontent.com/73540960/213210187-3a983e38-fb08-4539-b4e8-175da3856f23.png)
+
+# Checkout page
+
+you need to set default adress and credit card to buy items.
+
+![image](https://user-images.githubusercontent.com/73540960/213210932-3f0aa695-ec51-4f76-9787-b3acd4ea27d5.png)
+
+# adress page
+![image](https://user-images.githubusercontent.com/73540960/213211129-a542b5b1-5a7a-4f28-90c4-8cc8abaf7ecf.png)
+
+
+# credit card page
+![image](https://user-images.githubusercontent.com/73540960/213211223-efc9e534-f269-488f-86ed-e1a2887342dc.png)
+
 
 
 
