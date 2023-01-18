@@ -32,6 +32,24 @@ When you enter the website you will see a page where you can filter by categorie
 ![T-shirt-1](https://user-images.githubusercontent.com/73540960/212908707-1ba20056-114b-4e97-9f33-b44f2c25ee0e.jpg)
 
 
+After you filter by category you will redirect to a page like below.You can filter by price and color and size.
+
+![image](https://user-images.githubusercontent.com/73540960/213199594-a1584b9c-8c9f-4c90-91a1-fe79ce420284.png)
+
+after you click product you want you will redirect to a detail page. In this page you can add product to favorites or you can add the product to your Shop basket.
+
+![image](https://user-images.githubusercontent.com/73540960/213201386-8903c4ac-c7ac-4843-b6e9-c010e7945ac6.png)
+
+in profile page user can edit update his adresses , creadit card , personal information and see comments. 
+
+![image](https://user-images.githubusercontent.com/73540960/213202810-8af8216e-02ef-48a1-ade4-18388e046ae8.png)
+
+#favorite page
+in favorites page you can add product to card or delete it from favorites.
+![image](https://user-images.githubusercontent.com/73540960/213203778-28b6457f-3d4f-4adf-80c9-e4f924fa9cb6.png)
+
+
+
 
 
 
