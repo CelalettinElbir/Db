@@ -1,5 +1,5 @@
 # E-commerce Website
-
+This project allows users to filter and buy the product they want.
 
 ### What can you do?
 
